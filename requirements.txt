@@ -1,3 +1,6 @@
 numpy
 netCDF4
 dtw-python
+xarray
+matplotlib
+basemap

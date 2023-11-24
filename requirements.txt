@@ -4,3 +4,4 @@ dtw-python
 xarray
 matplotlib
 basemap
+pmdarima

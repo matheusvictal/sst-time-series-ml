@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.6.9)  27 NOV 2023 20:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.5) (preloaded format=pdflatex 2023.6.9)  28 NOV 2023 21:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -145,7 +145,7 @@ Package babel Info: Hyphen rules for 'brazil' set to \l@portuguese
 (babel)             (\language56). Reported on input line 111.
 Package babel Info: Making " an active character on input line 143.
 ))
-LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 3
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 2
 1.
  (C:\Users\Maiser\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
@@ -158,20 +158,20 @@ File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 ) (sbc-template.aux)
 \openout1 = `sbc-template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -270,72 +270,57 @@ cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 33.
+(Font)              <12> on input line 23.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 33.
+(Font)              <8> on input line 23.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 33.
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-3.
- (C:\Users\Maiser\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 3
-3.
- (C:\Users\Maiser\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omspcr.fd
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
-
-[1
+(Font)              <6> on input line 23.
+ [1
 
 {C:/Users/Maiser/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Mai
 ser/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
-<fig1.jpg, id=12, 254.3904pt x 232.2276pt>
+<fig1.jpg, id=10, 254.3904pt x 232.2276pt>
 File: fig1.jpg Graphic file (type jpg)
 <use fig1.jpg>
-Package pdftex.def Info: fig1.jpg  used on input line 113.
+Package pdftex.def Info: fig1.jpg  used on input line 103.
 (pdftex.def)             Requested size: 213.39568pt x 194.81471pt.
 LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
-14.
+04.
 
 (C:\Users\Maiser\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
-<fig2.jpg, id=13, 205.7286pt x 234.1548pt>
+<fig2.jpg, id=11, 205.7286pt x 234.1548pt>
 File: fig2.jpg Graphic file (type jpg)
 <use fig2.jpg>
-Package pdftex.def Info: fig2.jpg  used on input line 120.
+Package pdftex.def Info: fig2.jpg  used on input line 110.
 (pdftex.def)             Requested size: 128.0387pt x 145.73541pt.
-<table.jpg, id=14, 365.2044pt x 217.2918pt>
+<table.jpg, id=12, 365.2044pt x 217.2918pt>
 File: table.jpg Graphic file (type jpg)
 <use table.jpg>
-Package pdftex.def Info: table.jpg  used on input line 138.
+Package pdftex.def Info: table.jpg  used on input line 128.
 (pdftex.def)             Requested size: 298.75264pt x 177.75932pt.
 
-[2 <./fig1.jpg>] (sbc-template.bbl [3 <./fig2.jpg> <./table.jpg>]) [4]
+[2 <./fig1.jpg>] (sbc-template.bbl) [3 <./fig2.jpg> <./table.jpg>]
 (sbc-template.aux) ) 
 Here is how much of TeX's memory you used:
- 5818 strings out of 476411
- 102756 string characters out of 5788663
+ 5760 strings out of 476411
+ 101515 string characters out of 5788663
  1860845 words of memory out of 5000000
- 26098 multiletter control sequences out of 15000+600000
- 529680 words of font info for 62 fonts, out of 8000000 for 9000
+ 26048 multiletter control sequences out of 15000+600000
+ 528658 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,10n,77p,288b,419s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Maiser/AppData/Local/Programs/MiKTeX/fonts/type1/
 public/amsfonts/cm/cmr8.pfb><C:/Users/Maiser/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Maiser/AppData/Local/Programs/M
-iKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/Maiser/AppData/Local/Program
-s/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/Maiser/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Maiser/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/Maiser/AppData/Local/
-Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Maiser/AppData/Local
-/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on sbc-template.pdf (4 pages, 223281 bytes).
+s/type1/urw/helvetic/uhvb8a.pfb><C:/Users/Maiser/AppData/Local/Programs/MiKTeX/
+fonts/type1/urw/times/utmb8a.pfb><C:/Users/Maiser/AppData/Local/Programs/MiKTeX
+/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/Maiser/AppData/Local/Programs/MiKT
+eX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Maiser/AppData/Local/Programs/MiK
+TeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on sbc-template.pdf (3 pages, 201260 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
+ 46 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

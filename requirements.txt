@@ -11,3 +11,4 @@ sklearn
 tqdm
 statsmodels
 ipykernel
+seaborn

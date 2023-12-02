@@ -7,11 +7,14 @@ from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import shiftgrid
 
 class SSTHelper:
-    """ SST Helper functions 
+    """ SST Helper
 
-    Use the following date format: YYYY-MM-DD
+    Use o seguinte formato de data: YYYY-MM-DD
     """
 
+    f_inv = lambda x: x + 180
+    f = lambda x: ((x+180) % 360) - 180
+    
     def load_dataset(filename: str) -> xr.Dataset:
         ds = xr.open_dataset(filename)
         return ds
@@ -82,3 +85,4 @@ class SSTHelper:
         cbar.set_label('SST (degC)', fontsize=13)
         plt.title(f'SST filled contour map for {print_date}', fontsize=15)
         plt.show()
+

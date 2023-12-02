@@ -1,21 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from dtw import *
 import numpy as np
 from tqdm import tqdm
-
-class SSTUtil:
-    def get_sst_series(df: pd.DataFrame, lat: int, lon: int):
-        return df[(df['lat'] == lat) & (df['lon'] == lon)].reset_index(drop=True)
-    def get_subseries(df: pd.DataFrame, start: int, window: float):
-        return df[df['time'] > df['time'][start]][:window]
-    def plot_sst(df: pd.DataFrame, start: int, window: float):
-        fig, ax = plt.subplots()
-        subseries = SSTUtil.get_subseries(df, start, window)
-        ax.plot(subseries['time'], subseries['sst'], linewidth=2.0)
-        plt.xticks(rotation=30)
-        plt.show()
-
+from dtw import *
 
 class SubseriesDTW:
     lat: int

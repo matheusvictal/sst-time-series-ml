@@ -5,3 +5,9 @@ xarray
 matplotlib
 basemap
 pmdarima
+pandas
+torch
+sklearn
+tqdm
+statsmodels
+ipykernel

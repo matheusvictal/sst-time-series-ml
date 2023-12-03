@@ -8,8 +8,11 @@ from .sst_helper import SSTHelper
 import random
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.linear_model import SGDRegressor
+from sklearn.svm import SVR
 from scipy.optimize import differential_evolution
 from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import MinMaxScaler
+
 
 
 class DSPipeline:
@@ -28,7 +31,7 @@ class DSPipeline:
     def make_pipeline(
             self, series_sample_ratio: float = 1.0,
             top_subseries_ratio: float = 0.5,
-            window: int = 48):
+            window: int = 96):
 
         self.window = window
         self.subserie_dtw = SubserieDTW(
@@ -44,7 +47,13 @@ class DSPipeline:
 
 
     def fit(self): 
-        self.model = MultiOutputRegressor(SGDRegressor())
+        self.model = MultiOutputRegressor(
+            SVR()
+
+            # SGDRegressor(
+            #     learning_rate='optimal', 
+            #     early_stopping=True)
+            )
         self.model.fit(self.x_train, self.y_train)
 
     def evaluate(self):
@@ -62,21 +71,13 @@ class DSPipeline:
 
     def optimization_results(self):
         print('series_sample_ratio:', self.opt_results.x[0])
-        print('top_subseries_ratio:', self.opt_results.x[1])
+        # print('top_subseries_ratio:', self.opt_results.x[1])
         print("Best RMSE: ", self.opt_results.fun)
-        return self.opt_results.x[0], self.opt_results.x[1]
+        return self.opt_results.x[0]
 
 
-    def plot_predict(self):
-        plt.figure(figsize=(15,6))
-        plt.plot(range(0, 48), self.x_test[0], color = 'blue', linewidth=2.0, alpha = 0.6)
-        plt.plot(range(48, self.forecast_horizon+48), self.y_test, color = 'red', linewidth=2.0, alpha = 0.6)
-        plt.plot(range(48, self.forecast_horizon+48), self.y_test_pred, color = 'green', linewidth=2.0, alpha = 0.6)
-
-        plt.legend(['Real Serie', 'Expected', 'Predicted'])
-        plt.xlabel('Timestamp')
-        plt.title("Predicting future SST")
-        plt.show()
-
+    def plot_predict(self, point_name: str, ml_model_name: str):
+        SSTHelper.default_plot(self.y_test, self.y_test_pred, point_name, ml_model_name)
+        
 
 

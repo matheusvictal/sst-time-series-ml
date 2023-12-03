@@ -7,6 +7,7 @@ from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import shiftgrid
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error
 from math import sqrt
+import seaborn as sns
 
 class SSTHelper:
     """ SST Helper
@@ -26,6 +27,8 @@ class SSTHelper:
         df = ds.to_dataframe()
         df = df.reset_index()
         df = df[df['nbnds'] == 0]
+        f = lambda x: ((x+180) % 360) - 180
+        df['lon'] = df['lon'].copy().apply(f)
         return df
 
     def get_sst_series(df: pd.DataFrame, lat: int, lon: int) -> pd.DataFrame:
@@ -57,8 +60,6 @@ class SSTHelper:
 
     def mape(y_true, y_pred) -> float:
         return mean_absolute_percentage_error(y_true, y_pred)
-
-
 
     def sst_basemap(ds, day):
 
@@ -96,12 +97,67 @@ class SSTHelper:
         plt.title(f'SST filled contour map for {print_date}', fontsize=15)
         plt.show()
 
-
-
-
     def get_sst_series_default(df: pd.DataFrame, lat: int, lon: int) -> pd.DataFrame:
         df = df[df['nbnds'] == 0]
         sst_series = df[(df['lat'] == lat) & (df['lon'] == lon)].reset_index(drop=True)
         sst_series.set_index('time', inplace=True)
         sst_series.drop(['nbnds', 'time_bnds'], axis=1, inplace=True)
         return sst_series
+
+    def MinMaxScaler(X):
+        X_std = (X - np.min(X)) / (np.max(X) - np.min(X))
+        print(X_std)
+        X_scaled = X_std * (2) - 1
+        return X_scaled
+
+    def default_plot(y_real, y_pred, point_name: str, ml_model_name: str):
+        """
+        point_name: [Indian Ocean, Atlantic Ocean, etc]
+        ml_model_name: [SVR, SARIMA, LSTM]
+        """
+        # Imprime as previsoes para o conjunto de teste e os valores reais
+        fig, ax = plt.subplots(figsize=(15, 2.5))
+        sns.set(style="whitegrid")
+
+        color_dict = {
+            'SVR': 'deeppink',
+            'SARIMA': 'chartreuse',
+            'LSTM': 'orangered'
+        }
+
+        try:
+            color_to_use = color_dict[ml_model_name]
+        except KeyError:
+            color_to_use = 'gray'
+        
+        x_index = [
+            '2022-01-01',
+            '2022-02-01',
+            '2022-03-01',
+            '2022-04-01',
+            '2022-05-01',
+            '2022-06-01',
+            '2022-07-01',
+            '2022-08-01',
+            '2022-09-01',
+            '2022-10-01',
+            '2022-11-01',
+            '2022-12-01'
+        ]
+
+        df_lines = pd.DataFrame(
+            {'Data': x_index, 
+            'Actual SST': y_real,
+            'Predicted SST': y_pred})
+
+        df_lines.set_index('Data', inplace=True, drop=True)
+
+        sns.lineplot(data=df_lines,
+                    palette={'Actual SST': 'indigo', 'Predicted SST': color_to_use},
+                    linewidth=1.5)
+
+        plt.xticks(rotation=45)
+        plt.title(f'SST prediction for {point_name}', fontsize=16)
+        plt.xlabel('Time indicator (test set)', fontsize=12)
+        plt.ylabel('SST', fontsize=12)
+        plt.show()

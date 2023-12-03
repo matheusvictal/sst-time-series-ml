@@ -4,6 +4,7 @@ import numpy as np
 from tqdm import tqdm
 from dtw import *
 from .sst_helper import SSTHelper
+from sklearn.preprocessing import MinMaxScaler
 import random
 
 RANDOM_SEED = 4
@@ -29,6 +30,18 @@ class SubserieDTW:
         self.df = df
 
         self.point_df = SSTHelper.get_sst_series(df, lat, lon)
+        scaler_data = np.array(self.point_df['sst'])
+        # scaler_data
+        # self.scaler = MinMaxScaler(feature_range=(-1, 1))
+        # self.scaler.fit([scaler_data])
+        # print("scaler info: ")
+        # print([scaler_data])
+        # print(self.scaler.data_max_)
+        # print(self.scaler.)
+        scaler_data = SSTHelper.MinMaxScaler(scaler_data)
+        print(scaler_data)
+        # self.point_df['sst'] = scaler_data
+
         self.df_len = len(self.point_df)
 
         #          Split into train/test
@@ -93,12 +106,6 @@ class SubserieDTW:
         return np.array(x_train), np.array(y_train)
 
     def get_test(self):
-        # x_test = []
-        # y_test = []
-        # for i in (range(0, 60)):
-        #     x_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i, self.window)['sst']))
-        #     y_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i+self.window, self.forecast_horizon)['sst']))
-
         return np.array(self.main_subserie['sst']).reshape(1, -1), np.array(self.test_df['sst'])[:self.forecast_horizon]
 
     def get_point_df(self):

@@ -38,7 +38,7 @@ class SSTHelper:
         return df.iloc[start_index:start_index+window]
 
     def get_subseries_by_date(df: pd.DataFrame, start_date: str, window: int) -> pd.DataFrame:
-        return df.loc[date:][:window]
+        return df.loc[start_date:][:window]
 
     def plot_sst(df: pd.DataFrame, start_date: int, window: int):
         fig, ax = plt.subplots()
@@ -98,7 +98,7 @@ class SSTHelper:
 
 
 
-    
+
     def get_sst_series_default(df: pd.DataFrame, lat: int, lon: int) -> pd.DataFrame:
         df = df[df['nbnds'] == 0]
         sst_series = df[(df['lat'] == lat) & (df['lon'] == lon)].reset_index(drop=True)

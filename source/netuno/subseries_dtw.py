@@ -4,9 +4,13 @@ import numpy as np
 from tqdm import tqdm
 from dtw import *
 from .sst_helper import SSTHelper
+import random
+
+RANDOM_SEED = 4
+PERCENTAGE_DTW = 0.3
 
 class SubserieDTW:
-    """ Use this class to process information before using SVR """
+    """ Tem como utilidade realizar preprocessamento antes do SVR """
 
     lat: int
     lon: int
@@ -41,10 +45,18 @@ class SubserieDTW:
         print(f"Train/test proportion: {len(self.train_df)/self.df_len}/{len(self.test_df)/self.df_len}")
 
     
-    def get_nearest_subseries(self):
+    def get_nearest_subseries(self, series_sample_ratio: float = 0.3):
+        """
+        Calcula o DTW de uma porcentagem series_sample_ration de subseries aleatórias no treino 
+        """
         list_subseries = []
         np_main_subserie = np.array(self.main_subserie['sst'])
-        for i in tqdm(range(0, len(self.train_df) - (2*self.window))):
+
+        start_index_list = list(range(0, len(self.train_df) - (2*self.window)))
+        random.Random(RANDOM_SEED).shuffle(start_index_list)
+        start_index_list = start_index_list[:int(len(start_index_list) * series_sample_ratio)]
+
+        for i in tqdm(start_index_list):
             subserie_df = SSTHelper.get_subseries_by_index(self.train_df, i, self.window)
             np_subserie = np.array(subserie_df['sst'])
             np_next_subserie = np.array(SSTHelper.get_subseries_by_index(self.train_df, i+self.window, self.forecast_horizon)['sst'])
@@ -71,19 +83,29 @@ class SubserieDTW:
         print(f"DTW Distance: {nearest['distance']}")
         nearest['alignment'].plot(type="twoway",offset=-2)
 
-    def get_train(self, top_n_series: int = 200):
+    def get_train(self, subseries_ratio: float = 0.5):
+        """
+        Retorna x, y de treino utilizando as top subseries_ratio% series encontradas em get_nearest_subseries()
+        """
+        top_n_series = int(len(self.list_subseries) * subseries_ratio) + 1
         x_train = [i['df'] for i in self.list_subseries[:top_n_series]]
         y_train = [i['next'] for i in self.list_subseries[:top_n_series]]
         return np.array(x_train), np.array(y_train)
 
     def get_test(self):
-        x_test = []
-        y_test = []
-        for i in (range(0, 60)):
-            x_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i, self.window)['sst']))
-            y_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i+self.window, self.forecast_horizon)['sst']))
-        return np.array(x_test), np.array(y_test)
+        # x_test = []
+        # y_test = []
+        # for i in (range(0, 60)):
+        #     x_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i, self.window)['sst']))
+        #     y_test.append(np.array(SSTHelper.get_subseries_by_index(self.test_df, i+self.window, self.forecast_horizon)['sst']))
+
+        return np.array(self.main_subserie['sst']).reshape(1, -1), np.array(self.test_df['sst'])[:self.forecast_horizon]
 
     def get_point_df(self):
         return self.point_df
+
+    def get_main_subserie(self):
+        return self.main_subserie
+
+
     

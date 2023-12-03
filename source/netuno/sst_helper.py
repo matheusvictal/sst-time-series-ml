@@ -5,6 +5,8 @@ from tqdm import tqdm
 import xarray as xr
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import shiftgrid
+from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error
+from math import sqrt
 
 class SSTHelper:
     """ SST Helper
@@ -49,6 +51,14 @@ class SSTHelper:
         train = df.loc[:split_date]
         test = df.loc[split_date:][1:]
         return train, test
+
+    def rmse(y_true, y_pred) -> float:
+        return sqrt(mean_squared_error(y_true, y_pred))
+
+    def mape(y_true, y_pred) -> float:
+        return mean_absolute_percentage_error(y_true, y_pred)
+
+
 
     def sst_basemap(ds, day):
 

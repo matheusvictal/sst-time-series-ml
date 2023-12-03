@@ -83,11 +83,11 @@ class SubserieDTW:
         print(f"DTW Distance: {nearest['distance']}")
         nearest['alignment'].plot(type="twoway",offset=-2)
 
-    def get_train(self, subseries_ratio: float = 0.5):
+    def get_train(self, top_subseries_ratio: float = 0.5):
         """
         Retorna x, y de treino utilizando as top subseries_ratio% series encontradas em get_nearest_subseries()
         """
-        top_n_series = int(len(self.list_subseries) * subseries_ratio) + 1
+        top_n_series = int(len(self.list_subseries) * top_subseries_ratio) + 1
         x_train = [i['df'] for i in self.list_subseries[:top_n_series]]
         y_train = [i['next'] for i in self.list_subseries[:top_n_series]]
         return np.array(x_train), np.array(y_train)

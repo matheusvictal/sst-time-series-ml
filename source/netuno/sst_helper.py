@@ -96,3 +96,12 @@ class SSTHelper:
         plt.title(f'SST filled contour map for {print_date}', fontsize=15)
         plt.show()
 
+
+
+    
+    def get_sst_series_default(df: pd.DataFrame, lat: int, lon: int) -> pd.DataFrame:
+        df = df[df['nbnds'] == 0]
+        sst_series = df[(df['lat'] == lat) & (df['lon'] == lon)].reset_index(drop=True)
+        sst_series.set_index('time', inplace=True)
+        sst_series.drop(['nbnds', 'time_bnds'], axis=1, inplace=True)
+        return sst_series

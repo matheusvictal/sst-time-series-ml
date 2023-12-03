@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 from dtw import *
-from netuno import SSTHelper
+from .sst_helper import SSTHelper
 
 class SubserieDTW:
     """ Use this class to process information before using SVR """
@@ -25,7 +25,7 @@ class SubserieDTW:
         self.df = df
 
         self.point_df = SSTHelper.get_sst_series(df, lat, lon)
-        self.df_len = len(point_df)
+        self.df_len = len(self.point_df)
 
         #          Split into train/test
         # |---------train---------main-|---test---|      

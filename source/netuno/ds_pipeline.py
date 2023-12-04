@@ -79,5 +79,8 @@ class DSPipeline:
     def plot_predict(self, point_name: str, ml_model_name: str):
         SSTHelper.default_plot(self.y_test, self.y_test_pred, point_name, ml_model_name)
         
+    def evaluate_mape(self):
+        mape = SSTHelper.mape(self.y_test, self.y_test_pred)
+        return mape
 
 

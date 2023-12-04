@@ -121,7 +121,7 @@ class SSTHelper:
 
         color_dict = {
             'SVR': 'deeppink',
-            'SARIMA': 'chartreuse',
+            'SARIMA': 'olive',
             'LSTM': 'orangered'
         }
 

@@ -20,14 +20,13 @@ class SubserieDTW:
     df: pd.DataFrame
     list_subseries: list
 
-    def __init__(self, df, lat, lon, split_date: str, window: int = 48, forecast_horizon: int = 1):
-        print("Initializing")
-        print(f"Lat: {lat}, Lon: {lon}")
+    def __init__(self, df, lat, lon, split_date: str, window: int = 48, forecast_horizon: int = 1, verbose: bool = False):
         self.lat = lat
         self.lon = lon
         self.window = window
         self.forecast_horizon = forecast_horizon
         self.df = df
+        self.verbose = verbose
 
         self.point_df = SSTHelper.get_sst_series(df, lat, lon)
         scaler_data = np.array(self.point_df['sst'])
@@ -39,7 +38,6 @@ class SubserieDTW:
         # print(self.scaler.data_max_)
         # print(self.scaler.)
         scaler_data = SSTHelper.MinMaxScaler(scaler_data)
-        print(scaler_data)
         # self.point_df['sst'] = scaler_data
 
         self.df_len = len(self.point_df)
@@ -53,9 +51,14 @@ class SubserieDTW:
         # Get main subserie
         self.main_subserie = SSTHelper.get_subseries_by_index(self.train_df, len(self.train_df) - window, window)
         self.train_df = self.train_df[:-window]
-        print(f"Total length: {self.df_len}")
-        print(len(self.train_df), len(self.test_df))
-        print(f"Train/test proportion: {len(self.train_df)/self.df_len}/{len(self.test_df)/self.df_len}")
+
+        if self.verbose:
+            print("Initializing")
+            print(f"Lat: {lat}, Lon: {lon}")
+            print(scaler_data)
+            print(f"Total length: {self.df_len}")
+            print(len(self.train_df), len(self.test_df))
+            print(f"Train/test proportion: {len(self.train_df)/self.df_len}/{len(self.test_df)/self.df_len}")
 
     
     def get_nearest_subseries(self, series_sample_ratio: float = 0.3):
@@ -69,7 +72,7 @@ class SubserieDTW:
         random.Random(RANDOM_SEED).shuffle(start_index_list)
         start_index_list = start_index_list[:int(len(start_index_list) * series_sample_ratio)]
 
-        for i in tqdm(start_index_list):
+        for i in (start_index_list):
             subserie_df = SSTHelper.get_subseries_by_index(self.train_df, i, self.window)
             np_subserie = np.array(subserie_df['sst'])
             np_next_subserie = np.array(SSTHelper.get_subseries_by_index(self.train_df, i+self.window, self.forecast_horizon)['sst'])
@@ -88,12 +91,14 @@ class SubserieDTW:
             except ValueError as e:
                 print(f"Got value error: {e}")
         self.list_subseries = sorted(list_subseries, key=lambda item: item['distance'], reverse=False)
-        print(f"Obtained {len(self.list_subseries)} subseries")
+        if self.verbose:
+            print(f"Obtained {len(self.list_subseries)} subseries")
         return self.list_subseries
     
     def print_nearest_subserie(self):
         nearest = self.list_subseries[0]
-        print(f"DTW Distance: {nearest['distance']}")
+        if self.verbose:
+            print(f"DTW Distance: {nearest['distance']}")
         nearest['alignment'].plot(type="twoway",offset=-2)
 
     def get_train(self, top_subseries_ratio: float = 0.5):

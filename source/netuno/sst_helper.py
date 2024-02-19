@@ -106,7 +106,7 @@ class SSTHelper:
 
     def MinMaxScaler(X):
         X_std = (X - np.min(X)) / (np.max(X) - np.min(X))
-        print(X_std)
+        # print(X_std)
         X_scaled = X_std * (2) - 1
         return X_scaled
 

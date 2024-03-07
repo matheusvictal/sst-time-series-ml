@@ -31,12 +31,14 @@ class DSPipeline:
     def make_pipeline(
             self, series_sample_ratio: float = 1.0,
             top_subseries_ratio: float = 0.5,
-            window: int = 96):
+            window: int = 24):
 
         self.window = window
         self.subserie_dtw = SubserieDTW(
             self.df, self.lat, self.lon, self.split_date, 
             window=self.window, forecast_horizon=self.forecast_horizon)
+        
+        self.subserie_dtw.get_all_subseries()
         self.subserie_dtw.get_nearest_subseries(series_sample_ratio)
         self.x_train, self.y_train = self.subserie_dtw.get_train(top_subseries_ratio)
         self.x_test, self.y_test = self.subserie_dtw.get_test()
@@ -47,17 +49,17 @@ class DSPipeline:
 
 
     def fit(self): 
-        self.model = MultiOutputRegressor(
-            SVR()
-
+        self.model = MultiOutputRegressor(SVR())
             # SGDRegressor(
             #     learning_rate='optimal', 
             #     early_stopping=True)
-            )
         self.model.fit(self.x_train, self.y_train)
 
+    def predict(self, x):
+        return self.model.predict(x)[0]
+
     def evaluate(self):
-        self.y_test_pred = self.model.predict(self.x_test)[0]
+        self.y_test_pred = self.predict(self.x_test)
         rmse = SSTHelper.rmse(self.y_test, self.y_test_pred)
         return rmse
 

@@ -130,23 +130,23 @@ class SSTHelper:
         except KeyError:
             color_to_use = 'gray'
         
-        x_index = [
-            '2022-01',
-            '2022-02',
-            '2022-03',
-            '2022-04',
-            '2022-05',
-            '2022-06',
-            '2022-07',
-            '2022-08',
-            '2022-09',
-            '2022-10',
-            '2022-11',
-            '2022-12'
+        x_index = [f'm{i}' for i in range(len(y_real))
+            # '2022-01',
+            # '2022-02',
+            # '2022-03',
+            # '2022-04',
+            # '2022-05',
+            # '2022-06',
+            # '2022-07',
+            # '2022-08',
+            # '2022-09',
+            # '2022-10',
+            # '2022-11',
+            # '2022-12'
         ]
 
-        df_lines = pd.DataFrame(
-            {'Data': x_index, 
+        df_lines = pd.DataFrame({
+            'Data': x_index, 
             'Actual SST': y_real,
             'Predicted SST': y_pred})
 

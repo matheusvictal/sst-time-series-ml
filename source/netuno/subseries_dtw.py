@@ -30,15 +30,6 @@ class SubserieDTW:
 
         self.point_df = SSTHelper.get_sst_series(df, lat, lon)
         scaler_data = np.array(self.point_df['sst'])
-        # scaler_data
-        # self.scaler = MinMaxScaler(feature_range=(-1, 1))
-        # self.scaler.fit([scaler_data])
-        # print("scaler info: ")
-        # print([scaler_data])
-        # print(self.scaler.data_max_)
-        # print(self.scaler.)
-        scaler_data = SSTHelper.MinMaxScaler(scaler_data)
-        # self.point_df['sst'] = scaler_data
 
         self.df_len = len(self.point_df)
 
@@ -50,9 +41,11 @@ class SubserieDTW:
         
         # Get main subserie
         self.main_subserie = SSTHelper.get_subseries_by_index(self.train_df, len(self.train_df) - window, window)
+        self.np_main_subserie = np.array(self.main_subserie['sst'])
         self.train_df = self.train_df[:-window]
 
         if self.verbose:
+            print(df)
             print("Initializing")
             print(f"Lat: {lat}, Lon: {lon}")
             print(scaler_data)
@@ -60,40 +53,59 @@ class SubserieDTW:
             print(len(self.train_df), len(self.test_df))
             print(f"Train/test proportion: {len(self.train_df)/self.df_len}/{len(self.test_df)/self.df_len}")
 
+    def get_all_subseries(self):
+        """
+        Pega todas as subseries dada uma série
+        """
+        list_subseries = []
+
+        start_index_list = list(range(0, len(self.train_df) - (2*self.window)))
+
+        for i in start_index_list:
+            subserie_df = SSTHelper.get_subseries_by_index(self.train_df, i, self.window)
+            np_subserie = np.array(subserie_df['sst'])
+            np_next_subserie = np.array(SSTHelper.get_subseries_by_index(self.train_df, i+self.window, self.forecast_horizon)['sst'])
+            try:
+                subserie = {
+                    'df': np_subserie,
+                    'start': i,
+                    'next': np_next_subserie
+                }
+
+                list_subseries.append(subserie)
+            except ValueError as e:
+                print(f"Got value error: {e}")
+        self.list_subseries = list_subseries
+        if self.verbose:
+            print(f"Obtained {len(self.list_subseries)} subseries")
+        return self.list_subseries
+    
     
     def get_nearest_subseries(self, series_sample_ratio: float = 0.3):
         """
         Calcula o DTW de uma porcentagem series_sample_ration de subseries aleatórias no treino 
         """
-        list_subseries = []
-        np_main_subserie = np.array(self.main_subserie['sst'])
+        self.get_all_subseries()
+        
+        sampled_nearest_subseries = random.sample(
+            self.list_subseries, int(series_sample_ratio * len(self.list_subseries)))
 
-        start_index_list = list(range(0, len(self.train_df) - (2*self.window)))
-        random.Random(RANDOM_SEED).shuffle(start_index_list)
-        start_index_list = start_index_list[:int(len(start_index_list) * series_sample_ratio)]
-
-        for i in (start_index_list):
-            subserie_df = SSTHelper.get_subseries_by_index(self.train_df, i, self.window)
-            np_subserie = np.array(subserie_df['sst'])
-            np_next_subserie = np.array(SSTHelper.get_subseries_by_index(self.train_df, i+self.window, self.forecast_horizon)['sst'])
+        for i in range(len(sampled_nearest_subseries)):
+            subserie = sampled_nearest_subseries[i]
+            np_subserie = subserie['df']
             try:
-                if len(np_main_subserie) == len(np_subserie):
-                    alignment = dtw(np_main_subserie, np_subserie, keep_internals=True)
-                    subserie = {
-                        'df': np_subserie,
-                        'start': i,
-                        'distance': alignment.distance,
-                        'alignment': alignment,
-                        'next': np_next_subserie
-                    }
-
-                    list_subseries.append(subserie)
+                alignment = dtw(self.np_main_subserie, np_subserie, keep_internals=True)
+                subserie['distance'] = alignment.distance
+                subserie['alignment'] = alignment
+                sampled_nearest_subseries[i] = subserie
             except ValueError as e:
                 print(f"Got value error: {e}")
-        self.list_subseries = sorted(list_subseries, key=lambda item: item['distance'], reverse=False)
+        sampled_nearest_subseries = sorted(
+            sampled_nearest_subseries, key=lambda item: item['distance'], reverse=False)
         if self.verbose:
-            print(f"Obtained {len(self.list_subseries)} subseries")
-        return self.list_subseries
+            print(f"Obtained {len(sampled_nearest_subseries)} subseries")
+        self.list_subseries = sampled_nearest_subseries
+        return sampled_nearest_subseries
     
     def print_nearest_subserie(self):
         nearest = self.list_subseries[0]
@@ -110,8 +122,17 @@ class SubserieDTW:
         y_train = [i['next'] for i in self.list_subseries[:top_n_series]]
         return np.array(x_train), np.array(y_train)
 
-    def get_test(self):
-        return np.array(self.main_subserie['sst']).reshape(1, -1), np.array(self.test_df['sst'])[:self.forecast_horizon]
+    def get_test(self, y_size: int = None):
+        if y_size is None:
+            y_size = self.forecast_horizon
+        x_test = np.array(self.main_subserie['sst']).reshape(1, -1) 
+        y_test = np.array(self.test_df['sst'])[:y_size]
+        if self.forecast_horizon > len(y_test):
+            raise ValueError(
+                f'forecast_horizon ({self.forecast_horizon}) ' 
+                f'deve ser menor \n ou a proporção de teste '
+                f'({len(self.test_df)/self.df_len}) deve aumentar!')
+        return x_test, y_test
 
     def get_point_df(self):
         return self.point_df

@@ -9,6 +9,7 @@ import random
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.linear_model import SGDRegressor
 from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
 from scipy.optimize import differential_evolution
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
@@ -21,12 +22,17 @@ class DSPipeline:
     """
 
     def __init__(
-            self, df, lat: int, lon: int, split_date: str, forecast_horizon: int = 1):
+            self, df, lat: int, lon: int, split_date: str, forecast_horizon: int = 1, regressor = None):
         self.df = df
         self.lat = lat
         self.lon = lon
         self.split_date = split_date
         self.forecast_horizon = forecast_horizon
+        if regressor is None:
+            self.regressor = SVR()
+        else:
+            self.regressor = regressor
+            
 
     def make_pipeline(
             self, series_sample_ratio: float = 1.0,
@@ -39,27 +45,31 @@ class DSPipeline:
             window=self.window, forecast_horizon=self.forecast_horizon)
         
         self.subserie_dtw.get_all_subseries()
-        self.subserie_dtw.get_nearest_subseries(series_sample_ratio)
+        # self.subserie_dtw.get_nearest_subseries(series_sample_ratio)
         self.x_train, self.y_train = self.subserie_dtw.get_train(top_subseries_ratio)
         self.x_test, self.y_test = self.subserie_dtw.get_test()
 
         self.fit()
 
-        return self.evaluate()
+        return self.predict(self.x_train)
 
 
-    def fit(self): 
-        self.model = MultiOutputRegressor(SVR())
+    def fit(self, x = None, y = None):
+        if x is None:
+            x = self.x_train
+        if y is None:
+            y = self.y_train 
+        self.model = MultiOutputRegressor(self.regressor)
             # SGDRegressor(
             #     learning_rate='optimal', 
             #     early_stopping=True)
-        self.model.fit(self.x_train, self.y_train)
+        self.model.fit(x, y)
 
     def predict(self, x):
-        return self.model.predict(x)[0]
+        return self.model.predict(x)
 
     def evaluate(self):
-        self.y_test_pred = self.predict(self.x_test)
+        self.y_test_pred = self.predict(self.x_test)[0]
         rmse = SSTHelper.rmse(self.y_test, self.y_test_pred)
         return rmse
 

@@ -6,9 +6,10 @@ matplotlib
 basemap
 pmdarima
 pandas
-torch
-sklearn
+scikit-learn
 tqdm
 statsmodels
 ipykernel
 seaborn
+tsfresh
+torch

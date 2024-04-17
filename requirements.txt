@@ -11,5 +11,6 @@ tqdm
 statsmodels
 ipykernel
 seaborn
-tsfresh
-torch
+tslearn
+# tslearn
+# torch
